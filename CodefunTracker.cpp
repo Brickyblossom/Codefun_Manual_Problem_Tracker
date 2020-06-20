@@ -1,5 +1,17 @@
+/*
+    CodefunTracker.cpp
+    Written by Brickyblossom
+    June 20, 2020
+    This is an open-sourced code file which is licensed under the GNU GPL v3.
+*/
+
+/*
+    NOTE:
+    - This code only runs in Windows and some parts of it are resourse-heavy and overall evil.
+    - This code reads from a text file, which is insecure in many ways.
+    - I'm working on a better alternative on both those problems.
+*/
 #include<bits/stdc++.h>
-#include<limits>
 using namespace std;
 
 
