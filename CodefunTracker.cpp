@@ -3,23 +3,48 @@
     Written by Brickyblossom
     June 20, 2020
     This is an open-sourced code file which is licensed under the GNU GPL v3.
+    The code is used to load data onto a file, then presents the user with options to add new data, search for data, show stats and deletes all data.
 */
 
 /*
     NOTE:
-    - This code only runs in Windows and some parts of it are resourse-heavy and overall evil.
+    - Some part of this code is resource-heavy due to the use of "system"
     - This code reads from a text file, which is insecure in many ways.
     - I'm working on a better alternative on both those problems.
 */
-#include<bits/stdc++.h>
+
+//Libraries
+#include<iostream>
+#include<fstream>
+#include<iomanip>
+
+//Removes std::
 using namespace std;
 
+//Check OS for clrscr() which is to clear the entire console window.
+#ifdef _WIN32
+    //code for Windows
+    #define clrscr() system("cls")
 
+#elif __APPLE__
+    //code for Mac
+    #define clrscr() system("clear")
+
+#elif __linux__
+    //code for Linux
+    #define clrscr() system("clear")
+
+#else
+#   error "Unknown compiler"
+#endif
+
+//Global variables declaration
 long long length;
 string problems[100000] = {};
 long long stats[100000] = {}, countAC = 0;
 string t={};
 
+//Function declaration
 int options();
 void fail(string s);
 void success();
@@ -31,6 +56,7 @@ void showStats();
 void deleteData();
 void deleteDataPrompt();
 
+//Main function
 int main(){
     loadData();
     try{
@@ -42,8 +68,11 @@ int main(){
 
 }
 
+//Function definition
+
+//Main menu
 int options(){
-    system("cls");
+    clrscr();
     cout<<"The Codefun.vn problem tracker"<<endl;
     int option;
     cout<<"Please specify an option:"<<endl;
@@ -57,26 +86,29 @@ int options(){
     return option;
 }
 
+//Returns error message and returns to main menu
 void fail(string s){
-    system("cls");
+    clrscr();
     cout<<"The Codefun.vn problem tracker"<<endl;
     cout<<s<<endl;
     processOptions();
 }
 
+//Stops the screen to read results and once a key is pressed, returns to main menu
 void success(){
     cin.get();
     cin.get();
     processOptions();
 }
 
+//Loads data from files
 void loadData(){
     countAC=0;
     fstream fs;
-    fs.open("Length.txt",fstream::in);
+    fs.open("ProblemsLength.inp",fstream::in);
     fs>>length;
     fs.close();
-    fs.open("Data.txt",fstream::in);
+    fs.open("Database.inp",fstream::in);
     for(long long i=0;i<length;i++){
         fs>>problems[i];
         if(problems[i]!=""){
@@ -90,7 +122,7 @@ void loadData(){
     return;
 }
 
-
+//Main menu handler
 int processOptions(){
     int option = options();
     switch(option){
@@ -104,6 +136,7 @@ int processOptions(){
     return 0;
 }
 
+//Search for a problem if it has been solved (exists in database)
 void problemSearch(){
     cout<<"Please specify the problem code: ";
     cin>>t;
@@ -119,6 +152,7 @@ void problemSearch(){
     return;
 }
 
+//Checks if a problem has already existed in the file, if not then append the problem to the database
 void appendProblem(){
     cout<<"Please specify the problem code: ";
     cin>>t;
@@ -129,13 +163,14 @@ void appendProblem(){
         }
     }
     fstream fs;
-    fs.open("Data.txt",fstream::app);
+    fs.open("Database.inp",fstream::app);
     fs<<t<<endl;
     fs.close();
     cout<<"Problem added to list!"<<endl;
     success();
 }
 
+//Shows user stats
 void showStats(){
     cout<<"User stats:"<<endl;
     cout<<"Problems solved: "<<countAC<<endl;
@@ -146,14 +181,16 @@ void showStats(){
     return;
 }
 
+//Wipe all data
 void deleteData(){
     fstream fs;
-    fs.open("Data.txt",fstream::out|fstream::trunc);
+    fs.open("Database.inp",fstream::out|fstream::trunc);
     fs.close();
     cout<<"All data deleted."<<endl;
     success();
 }
 
+//Prompts data deletion
 void deleteDataPrompt(){
     char ans,ans2;
     cout<<"Are you sure you want to delete all data(Y/N)?";
