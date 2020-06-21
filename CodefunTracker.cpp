@@ -21,22 +21,12 @@
 //Removes std::
 using namespace std;
 
-//Check OS for clrscr() which is to clear the entire console window.
-#ifdef _WIN32
-    //code for Windows
-    #define clrscr() system("cls")
-
-#elif __APPLE__
-    //code for Mac
-    #define clrscr() system("clear")
-
-#elif __linux__
-    //code for Linux
-    #define clrscr() system("clear")
-
-#else
-#   error "Unknown compiler"
-#endif
+//clrscr() which is to clear the entire console window, it is OS-dependent and theoretically works for Windows, Mac and Linux.
+//However the usage of "system" makes it quite resource-intensive and dangerous.
+void clrscr(){
+    system("cls||clear");
+    return;
+}
 
 //Global variables declaration
 long long length;
@@ -55,6 +45,7 @@ int processOptions();
 void showStats();
 void deleteData();
 void deleteDataPrompt();
+string rankVerdict();
 
 //Main function
 int main(){
@@ -170,6 +161,35 @@ void appendProblem(){
     success();
 }
 
+//Gets current user rank based on number of problems solved
+string rankVerdict(){
+    double percentage = (double)countAC/length*100;
+    cout<<percentage<<endl;
+    string s="Newbie";
+    if(percentage>=2){
+        s = "Beginner";
+    }
+    if(percentage>=5){
+        s = "Novice";
+    }
+    if(percentage>=10){
+        s = "Coder";
+    }
+    if(percentage>=25){
+        s = "Expert";
+    }
+    if(percentage>=37.55){
+        s = "Master";
+    }
+    if(percentage>=55){
+        s = "Hacker";
+    }
+    if(percentage>=90){
+        s = "Grandmaster";
+    }
+    return s;
+}
+
 //Shows user stats
 void showStats(){
     cout<<"User stats:"<<endl;
@@ -177,6 +197,7 @@ void showStats(){
     cout<<"Problems total: "<<length<<endl;
     cout<<fixed<<setprecision(2);
     cout<<"AC Percentage: "<<(double)countAC/length*100<<"%"<<endl;
+    cout<<"Rank verdict: "<<rankVerdict()<<endl;
     success();
     return;
 }
