@@ -22,7 +22,7 @@
 //Removes std::
 using namespace std;
 
-//clrscr() which is to clear the entire console window, it is OS-dependent and theoretically works for Windows, Mac and Linux.
+//clrscr() which is to clear the entire console window, it is OS-dependent and theoretically works for all Windows, Mac and Linux.
 //However the usage of "system" makes it quite resource-intensive and dangerous.
 void clrscr(){
     system("cls||clear");
@@ -30,9 +30,20 @@ void clrscr(){
 }
 
 //Global variables declaration
+
+//Total number of problems in Codefun.vn
+const long long num = 521;
+
+//Length of problem list
 long long length;
+
+//Total number of problems solved
+long long countAC = 0;
+
+//Database
 string problems[100000] = {};
-long long stats[100000] = {}, countAC = 0;
+
+//User input
 string t={};
 
 //Function declaration
@@ -59,7 +70,6 @@ int main(){
     catch(int n){
         return 0;
     }
-
 }
 
 //Function definitions//
@@ -191,7 +201,7 @@ void appendProblem(){
 
 //Gets current user rank based on number of problems solved
 string rankVerdict(){
-    double percentage = (double)countAC/length*100;
+    double percentage = (double)countAC/num*100;
     //cout<<percentage<<endl;
     string s="Newbie";
     if(percentage>=2){
@@ -222,9 +232,9 @@ string rankVerdict(){
 void showStats(){
     cout<<"User stats:"<<endl;
     cout<<"Problems solved: "<<countAC<<endl;
-    cout<<"Problems total: "<<length<<endl;
+    cout<<"Problems total: "<<num<<endl;
     cout<<fixed<<setprecision(2);
-    cout<<"AC Percentage: "<<(double)countAC/length*100<<"%"<<endl;
+    cout<<"AC Percentage: "<<(double)countAC/num*100<<"%"<<endl;
     cout<<"Rank verdict: "<<rankVerdict()<<endl;
     success();
     return;
