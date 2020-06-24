@@ -2,6 +2,7 @@
     CodefunTracker.cpp
     Written by Brickyblossom
     June 20, 2020
+    Latest revision: June 24, 2020.
     This is an open-sourced code file which is licensed under the GNU GPL v3.
     The code is used to load data onto a file, then presents the user with options to add new data, search for data, show stats and deletes all data.
 */
@@ -46,10 +47,12 @@ void showStats();
 void deleteData();
 void deleteDataPrompt();
 string rankVerdict();
+void lexSort(string data[]);
 
 //Main function
 int main(){
     loadData();
+    lexSort(problems);
     try{
        processOptions();
     }
@@ -59,7 +62,7 @@ int main(){
 
 }
 
-//Function definition
+//Function definitions//
 
 //Main menu
 int options(){
@@ -113,6 +116,31 @@ void loadData(){
     return;
 }
 
+//Sort data in lexicographical order
+void lexSort(string data[]){
+    long long i,j,n;
+    string temp = "";
+    fstream fs;
+    fs.open("ProblemsLength.inp",fstream::in);
+    fs>>n;
+    fs.close();
+    for(i=0;i<=n-1;i++){
+        for(j=i+1;j<=n;j++){
+            if(data[i]>data[j]){
+                temp = data[i];
+                data[i] = data[j];
+                data[j] = temp;
+            }
+        }
+    }
+    fs.open("Database.inp",fstream::out|fstream::trunc);
+    for(i=0;i<=n-1;i++){
+        if(data[i]=="") continue;
+        fs<<data[i]<<endl;
+    }
+    fs.close();
+}
+
 //Main menu handler
 int processOptions(){
     int option = options();
@@ -164,7 +192,7 @@ void appendProblem(){
 //Gets current user rank based on number of problems solved
 string rankVerdict(){
     double percentage = (double)countAC/length*100;
-    cout<<percentage<<endl;
+    //cout<<percentage<<endl;
     string s="Newbie";
     if(percentage>=2){
         s = "Beginner";
